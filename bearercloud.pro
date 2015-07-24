@@ -1,6 +1,6 @@
 TARGET = bearercloud
 
-QT = core gui network svg
+QT = core gui network svg widgets
 
 HEADERS = bearercloud.h \
           cloud.h
