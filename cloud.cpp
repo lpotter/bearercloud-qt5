@@ -245,10 +245,11 @@ void Cloud::stateChanged(QNetworkSession::State state)
         tooltip += tr("<b>HIDDEN NETWORK</b><br>");
     else
         tooltip += tr("<b>%1</b><br>").arg(configuration.name());
-
+#ifndef QT_NO_NETWORKINTERFACE
     const QNetworkInterface interface = session->interface();
     if (interface.isValid())
         tooltip += tr("<br>Interface: %1").arg(interface.humanReadableName());
+#endif
     tooltip += tr("<br>Id: %1").arg(configuration.identifier());
 
     const QString bearerName = configuration.bearerTypeName();

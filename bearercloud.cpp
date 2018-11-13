@@ -144,22 +144,23 @@ void BearerCloud::configurationAdded(const QNetworkConfiguration &config)
              << config.state();
 
     const QNetworkConfiguration::StateFlags state = config.state();
+    if (!configStates.values().contains(config.identifier())) {
+        configStates.insert(state, config.identifier());
 
-    configStates.insert(state, config.identifier());
+        const qreal radius = Cloud::getRadiusForState(state);
+        const int count = configStates.count(state);
+        const qreal angle = 2 * M_PI / count;
 
-    const qreal radius = Cloud::getRadiusForState(state);
-    const int count = configStates.count(state);
-    const qreal angle = 2 * M_PI / count;
+        Cloud *item = new Cloud(config);
+        configurations.insert(config.identifier(), item);
 
-    Cloud *item = new Cloud(config);
-    configurations.insert(config.identifier(), item);
+        item->setPos(radius * cos((count-1) * angle + offset[state]),
+                     radius * sin((count-1) * angle + offset[state]));
 
-    item->setPos(radius * cos((count-1) * angle + offset[state]),
-                 radius * sin((count-1) * angle + offset[state]));
+        addItem(item);
 
-    addItem(item);
-
-    cloudMoved();
+        cloudMoved();
+    }
 }
 
 void BearerCloud::configurationRemoved(const QNetworkConfiguration &config)
